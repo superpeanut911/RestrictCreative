@@ -3,6 +3,13 @@ package net.endercraftbuild;
 
 import java.io.File;
 import java.io.IOException;
+
+
+import net.endercraftbuild.commands.RCcommandexecutor;
+import net.endercraftbuild.inventories.InvSplit;
+import net.endercraftbuild.listeners.PlayerListener;
+import net.endercraftbuild.metrics.Metrics;
+
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -15,23 +22,23 @@ public class Main extends JavaPlugin implements Listener {
 			{
 				this.saveDefaultConfig(); }
 			try {
-			    Metrics metrics = new Metrics(this);
-			    metrics.start();
+				Metrics metrics = new Metrics(this);
+				metrics.start();
 			} catch (IOException e) {
-			    // Failed to submit the stats :-(
+				// Failed to submit the stats :-(
 			}
 		}
 		getLogger().info("RestrictCreative by superpeanut911 has been enabled!");
 		getCommand("rc").setExecutor(new RCcommandexecutor(this));
 		PluginManager pm = this.getServer().getPluginManager();
 		pm.registerEvents(new PlayerListener(this), this);
+		pm.registerEvents(new InvSplit(), this);
 	}
 
 	public void onDisable(){
 		getLogger().info("RestrictCreative has been disabled!"); {
-		this.saveConfig();
 		}
 	}
+	{
+	}
 }
-
-

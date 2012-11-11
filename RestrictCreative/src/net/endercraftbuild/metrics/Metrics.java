@@ -1,4 +1,4 @@
-package net.endercraftbuild;
+package net.endercraftbuild.metrics;
 
 
 /*

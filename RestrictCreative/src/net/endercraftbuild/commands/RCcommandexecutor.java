@@ -1,4 +1,6 @@
-package net.endercraftbuild;
+package net.endercraftbuild.commands;
+
+import net.endercraftbuild.Main;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -42,10 +44,9 @@ public class RCcommandexecutor implements CommandExecutor {
 											if (sender instanceof Player) 
 											{
 												sender.sendMessage(ChatColor.GREEN + "=========" + ChatColor.AQUA + ChatColor.BOLD + "RestrictCreative" + ChatColor.GREEN +  "=========" );
-												sender.sendMessage(ChatColor.YELLOW + "RestrictCreative v 1.4.1 by superpeanut911");
+												sender.sendMessage(ChatColor.YELLOW + "RestrictCreative v 1.4.2 by superpeanut911");
 												sender.sendMessage(ChatColor.DARK_GREEN + "Commands:");
 												sender.sendMessage(ChatColor.GREEN + "/rc reload - Reloads plugin");
-												sender.sendMessage(ChatColor.GREEN + "/rc version - Displays version");
 												sender.sendMessage(ChatColor.GREEN + "==================================" );
 											}
 										}
@@ -61,9 +62,8 @@ public class RCcommandexecutor implements CommandExecutor {
 			}
 			return true;
 		}
-		return true;
+	return true;
 	}
 	{
-
 	}
 }
