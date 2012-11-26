@@ -1,5 +1,6 @@
 package net.endercraftbuild.metrics;
 
+//mcstats.org/plugin/RestrictCreative
 
 /*
  * Copyright 2011 Tyler Blair. All rights reserved.

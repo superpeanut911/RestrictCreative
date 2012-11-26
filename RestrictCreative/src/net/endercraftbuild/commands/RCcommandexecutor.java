@@ -9,6 +9,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 public class RCcommandexecutor implements CommandExecutor {
+	private String prefix = ChatColor.RED + "[" + ChatColor.GOLD + "RestrictCreative" + ChatColor.RED + "] ";
 	private Main plugin;
 	public RCcommandexecutor(Main plugin) {
 		this.plugin = plugin;
@@ -26,11 +27,11 @@ public class RCcommandexecutor implements CommandExecutor {
 									if (sender.hasPermission("restrictcreative.reload")) {
 										{
 											plugin.reloadConfig();
-											sender.sendMessage(ChatColor.AQUA + "[RestrictCreative]" + ChatColor.GREEN + " Plugin Reloaded!");
+											sender.sendMessage(prefix + ChatColor.GOLD + "Plugin Reloaded!");
 										}
 									}
 									else {
-										sender.sendMessage(ChatColor.AQUA + "[RestrictCreative]" + ChatColor.RED + " You do not have permission to use this command!");
+										sender.sendMessage(prefix + ChatColor.RED + "You do not have permission to use this command!");
 									}
 								}
 							}

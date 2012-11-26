@@ -4,9 +4,7 @@ package net.endercraftbuild;
 import java.io.File;
 import java.io.IOException;
 
-
 import net.endercraftbuild.commands.RCcommandexecutor;
-import net.endercraftbuild.inventories.InvSplit;
 import net.endercraftbuild.listeners.PlayerListener;
 import net.endercraftbuild.metrics.Metrics;
 
@@ -32,7 +30,7 @@ public class Main extends JavaPlugin implements Listener {
 		getCommand("rc").setExecutor(new RCcommandexecutor(this));
 		PluginManager pm = this.getServer().getPluginManager();
 		pm.registerEvents(new PlayerListener(this), this);
-		pm.registerEvents(new InvSplit(), this);
+		getConfig().options().copyDefaults(true);
 	}
 
 	public void onDisable(){
