@@ -175,13 +175,13 @@ public class PlayerListener implements Listener {
 		if(!(event.getPlayer().hasPermission("restrictcreative.bypass.breakblacklist")))
 		{
 		if (plugin.getConfig().getBoolean("break-blacklist.enabled") == true) {
-				List<Integer> breakblacklistID = plugin.getConfig().getIntegerList("break-blacklist.blacklist");
-				Block brokeBlock = event.getBlock();
-					{
-						if (breakblacklistID.contains(Integer.valueOf(brokeBlock.getTypeId()))) {
-							String configmsg = ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("breack-blacklist.message"));
-							event.setCancelled(true);
-							player.sendMessage(prefix + configmsg +  Material.getMaterial(brokeBlock.getTypeId()) + "!");
+			List<Integer> breakblacklistID = plugin.getConfig().getIntegerList("break-blacklist.blacklist");
+			Block bBlock = event.getBlock();
+				{
+				if (breakblacklistID.contains(Integer.valueOf(bBlock.getTypeId()))) {
+					event.setCancelled(true);
+					String configmsg = ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("break-blacklist.message"));
+					player.sendMessage(prefix + configmsg +  Material.getMaterial(bBlock.getTypeId()) + "!");
 							}
 						}
 					}

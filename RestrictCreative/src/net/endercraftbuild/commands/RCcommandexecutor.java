@@ -18,37 +18,38 @@ public class RCcommandexecutor implements CommandExecutor {
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 		if (cmd.getName().equalsIgnoreCase("rc")) {
 			{
-				if (args.length == 1) {
-					{
-						if (args[0].equalsIgnoreCase("reload")) {
-							{
-								if (sender instanceof Player) 
-								{
-									if (sender.hasPermission("restrictcreative.reload")) {
-										{
-											plugin.reloadConfig();
-											sender.sendMessage(prefix + ChatColor.GOLD + "Plugin Reloaded!");
-										}
-									}
-									else {
-										sender.sendMessage(prefix + ChatColor.RED + "You do not have permission to use this command!");
-									}
-								}
+			if (args.length == 1) {
+			{
+			if (args[0].equalsIgnoreCase("reload")) {
+			{
+			if (sender instanceof Player) 
+			{
+			if (sender.hasPermission("restrictcreative.reload")) {
+			{
+				plugin.reloadConfig();
+				sender.sendMessage(prefix + ChatColor.GOLD + "Plugin Reloaded!");
+				
+						}
+					}
+					else {
+					sender.sendMessage(prefix + ChatColor.RED + "You do not have permission to use this command!");
 							}
 						}
-						else if(cmd.getName().equalsIgnoreCase("rc"))
+					}
+				}
+				else if(cmd.getName().equalsIgnoreCase("rc"))
+					{
+					if(args.length == 1) {
+					{
+					if(args[0].equalsIgnoreCase("help")) {
+					{
+					if (sender instanceof Player) 
 						{
-							if(args.length == 1) {
-								{
-									if(args[0].equalsIgnoreCase("help")) {
-										{
-											if (sender instanceof Player) 
-											{
-												sender.sendMessage(ChatColor.GREEN + "=========" + ChatColor.AQUA + ChatColor.BOLD + "RestrictCreative" + ChatColor.GREEN +  "=========" );
-												sender.sendMessage(ChatColor.YELLOW + "RestrictCreative v 1.4.2 by superpeanut911");
-												sender.sendMessage(ChatColor.DARK_GREEN + "Commands:");
-												sender.sendMessage(ChatColor.GREEN + "/rc reload - Reloads plugin");
-												sender.sendMessage(ChatColor.GREEN + "==================================" );
+							sender.sendMessage(ChatColor.GREEN + "=========" + ChatColor.AQUA + ChatColor.BOLD + "RestrictCreative" + ChatColor.GREEN +  "=========" );
+							sender.sendMessage(ChatColor.YELLOW + "RestrictCreative v 1.4.3 by superpeanut911");
+							sender.sendMessage(ChatColor.DARK_GREEN + "Commands:");
+							sender.sendMessage(ChatColor.GREEN + "/rc reload - Reloads plugin");
+							sender.sendMessage(ChatColor.GREEN + "==================================" );
 											}
 										}
 									}
