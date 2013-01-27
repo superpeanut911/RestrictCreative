@@ -12,8 +12,10 @@ import org.bukkit.block.Block;
 import org.bukkit.block.Chest;
 import org.bukkit.block.DoubleChest;
 import org.bukkit.command.Command;
+import org.bukkit.entity.Arrow;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Creature;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -165,7 +167,7 @@ public class PlayerListener implements Listener {
 
 		}
 	}
-	//Block break blacklist. untested!
+	//Block break blacklist
 	@EventHandler
 	public void onBreak(BlockBreakEvent event) {
 		Player player = event.getPlayer();
@@ -189,4 +191,32 @@ public class PlayerListener implements Listener {
 			}
 		}
 	}
+{
 }
+	
+@EventHandler//Block dealing damage to mobs
+public void onMobDamage(EntityDamageByEntityEvent e) {
+	if(e.getDamager() instanceof Creature)
+		return;
+	if(e.getDamager() instanceof Arrow)
+		return;
+	if(e.getEntity() instanceof Creature && e.getDamager() instanceof Player) {
+	if(((Player) e.getDamager()).getGameMode().equals(GameMode.CREATIVE))
+		if(!(((Player) e.getDamager()).hasPermission("restrictcreative.bypass.mobs")))
+			if (plugin.getConfig().getBoolean("block-mob-harming.enabled") == true) {
+			
+					e.setCancelled(true);
+						String configmsg = ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("block-mob-harming.message"));	
+							((Player) e.getDamager()).sendMessage(prefix + configmsg);
+
+  }	
+}
+}
+{
+}
+}
+
+
+	
+	
+	

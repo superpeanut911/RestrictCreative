@@ -7,6 +7,7 @@ import java.io.IOException;
 import net.endercraftbuild.commands.RCcommandexecutor;
 import net.endercraftbuild.listeners.PlayerListener;
 import net.endercraftbuild.metrics.Metrics;
+import net.endercraftbuild.inventories.InvManager;
 
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.PluginManager;
@@ -30,6 +31,7 @@ public class Main extends JavaPlugin implements Listener {
 		getCommand("rc").setExecutor(new RCcommandexecutor(this));
 		PluginManager pm = this.getServer().getPluginManager();
 		pm.registerEvents(new PlayerListener(this), this);
+		pm.registerEvents(new InvManager(this), this);
 		getConfig().options().copyDefaults(true);
 	}
 
