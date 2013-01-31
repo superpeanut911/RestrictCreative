@@ -1,13 +1,13 @@
-package net.endercraftbuild;
+package main.java.net.endercraftbuild;
 
 
 import java.io.File;
 import java.io.IOException;
 
-import net.endercraftbuild.commands.RCcommandexecutor;
-import net.endercraftbuild.listeners.PlayerListener;
-import net.endercraftbuild.metrics.Metrics;
-import net.endercraftbuild.inventories.InvManager;
+import main.java.net.endercraftbuild.commands.RCcommandexecutor;
+import main.java.net.endercraftbuild.listeners.PlayerListener;
+import main.java.net.endercraftbuild.metrics.Metrics;
+import main.java.net.endercraftbuild.inventories.InvManager;
 
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.PluginManager;

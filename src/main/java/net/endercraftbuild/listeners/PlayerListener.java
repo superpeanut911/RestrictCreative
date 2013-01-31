@@ -1,8 +1,8 @@
-package net.endercraftbuild.listeners;
+package main.java.net.endercraftbuild.listeners;
 
 import java.util.List;
 
-import net.endercraftbuild.Main;
+import main.java.net.endercraftbuild.Main;
 
 
 import org.bukkit.ChatColor;

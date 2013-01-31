@@ -1,4 +1,4 @@
-package net.endercraftbuild.inventories;
+package main.java.net.endercraftbuild.inventories;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
