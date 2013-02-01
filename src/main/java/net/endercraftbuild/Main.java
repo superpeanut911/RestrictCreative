@@ -7,15 +7,19 @@ import java.io.IOException;
 import main.java.net.endercraftbuild.commands.RCcommandexecutor;
 import main.java.net.endercraftbuild.listeners.PlayerListener;
 import main.java.net.endercraftbuild.metrics.Metrics;
+import main.java.net.endercraftbuild.net.updater.Updater;
 import main.java.net.endercraftbuild.inventories.InvManager;
 
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
-public class Main extends JavaPlugin implements Listener {
-
+public class Main extends JavaPlugin implements Listener  {
+	
+	Updater updater = new Updater(this, "nocreativepvp", this.getFile(), Updater.UpdateType.DEFAULT, false);
+	
 	public void onEnable(){
+		
 		File configFile = new File(this.getDataFolder() + "/config.yml");{
 			if(!configFile.exists())
 			{
