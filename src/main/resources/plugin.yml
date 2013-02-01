@@ -1,6 +1,6 @@
 name: RestrictCreative
-main: net.endercraftbuild.Main
-version: 1.5.1
+main: main.java.net.endercraftbuild.Main
+version: 1.5.1-DEV
 author: superpeanut911
 permissions:
     restrictcreative.bypass.*:
