@@ -1,10 +1,11 @@
-package main.java.net.endercraftbuild.net.updater;
+package main.java.net.endercraftbuild.updater;
 
 /*
  * Updater for Bukkit.
  *
  * This class provides the means to safetly and easily update a plugin, or check to see if it is updated using dev.bukkit.org
  */
+
 
 import java.io.*;
 import java.lang.Runnable;
@@ -19,6 +20,11 @@ import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.events.XMLEvent;
+
+import main.java.net.endercraftbuild.Main;
+
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.Plugin;
 
@@ -38,8 +44,16 @@ import org.bukkit.plugin.Plugin;
  * @author H31IX
  */
 
-public class Updater
+public class Updater {
+	private Main plugin1;
+
+	public Updater(Main instance) {
+
+		plugin1 = instance;
+	}
+
 {
+}
     private Plugin plugin;
     private UpdateType type;
     private String versionTitle;
@@ -122,7 +136,7 @@ public class Updater
      * @param plugin
      *            The plugin that is checking for an update.
      * @param slug
-     *            The dev.bukkit.org slug of the project (http://dev.bukkit.org/server-mods/nocreativepvp)
+     *            The dev.bukkit.org slug of the project (http://dev.bukkit.org/server-mods/SLUG_IS_HERE)
      * @param file
      *            The file that the plugin is running from, get this by doing this.getFile() from within your main class.
      * @param type
@@ -198,6 +212,9 @@ public class Updater
      */
     private void saveFile(File folder, String file, String u)
     {
+    	if (plugin1.getConfig().getBoolean("allow-autoupdate.enabled") == false) {
+    		Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN + "AutoUpdate is Disabled!");
+    	}
         if(!folder.exists())
         {
             folder.mkdir();
@@ -379,6 +396,7 @@ public class Updater
      * Obtain the direct download file url from the file's page.
      */
     private String getFile(String link)
+    
     {
         String download = null;
         try
@@ -508,8 +526,10 @@ public class Updater
      */
     private boolean readFeed()
     {
+    	
         try
         {
+        	
             // Set header values intial to the empty string
             String title = "";
             String link = "";
@@ -562,8 +582,9 @@ public class Updater
         {
             plugin.getLogger().warning("Could not reach dev.bukkit.org for update checking. Is it offline?");
             return false;
-        }
-    }
+        	}
+    	}
+    
 
     /**
      * Open the RSS feed
@@ -581,10 +602,11 @@ public class Updater
         }
     }
 
-    private class UpdateRunnable implements Runnable {
-
+    public class UpdateRunnable implements Runnable {
+   
         public void run() {
-            if(url != null)
+
+        	if(url != null)
             {
                 // Obtain the results of the project's file feed
                 if(readFeed())
@@ -606,10 +628,10 @@ public class Updater
                         else
                         {
                             result = UpdateResult.UPDATE_AVAILABLE;
-                        }
-                    }
-                }
-            }
+                        	}
+                    	}
+                	}
+            	}
+        	}	
         }
     }
-}

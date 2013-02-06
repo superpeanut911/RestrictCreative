@@ -75,6 +75,21 @@ block-mob-harming:
   enabled: true
   message: "&cYou are not allowed to hurt mobs in creative!"
 
+#==============================
+#         Auto Update        //
+#==============================
+
+allow-autoupdate:
+  enabled: true
+
+
+#==============================
+#      Inventory Split        //
+#==============================
+
+inventory-split:
+  enabled: true
+
 
 #==============================
 #        END OF CONFIG       //

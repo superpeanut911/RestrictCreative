@@ -25,18 +25,20 @@ public class InvManager implements Listener {
 	public void Gm(PlayerGameModeChangeEvent event) throws IllegalArgumentException, IOException {
 
 		Player player = event.getPlayer();
-
+		if (plugin.getConfig().getBoolean("inventory-split.enabled") == true) { 
 		if(event.getNewGameMode() == GameMode.CREATIVE) {
 			saveSurvivalInv(player);
 			player.getInventory().clear();
 			loadCreativeInv(player);
 
-		} else {
+		} else 
+			if (plugin.getConfig().getBoolean("inventory-split.enabled") == true) {
 			saveCreativeInv(player);
 			player.getInventory().clear();
-			loadSurvivalInv(player);
+			loadSurvivalInv(player); {
+				}
+			}
 		}
-
 	}
 
 

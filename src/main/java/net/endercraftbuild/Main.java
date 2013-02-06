@@ -7,7 +7,7 @@ import java.io.IOException;
 import main.java.net.endercraftbuild.commands.RCcommandexecutor;
 import main.java.net.endercraftbuild.listeners.PlayerListener;
 import main.java.net.endercraftbuild.metrics.Metrics;
-import main.java.net.endercraftbuild.net.updater.Updater;
+import main.java.net.endercraftbuild.updater.Updater;
 import main.java.net.endercraftbuild.inventories.InvManager;
 
 import org.bukkit.event.Listener;
