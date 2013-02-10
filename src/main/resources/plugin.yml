@@ -1,7 +1,8 @@
 name: RestrictCreative
 main: main.java.net.endercraftbuild.Main
-version: 1.5.2
+version: 1.5.3-DEV
 author: superpeanut911
+softdepend: [Vault]
 permissions:
     restrictcreative.bypass.*:
         description: Bypass Everything
@@ -37,6 +38,9 @@ permissions:
         default: op
     restrictcreative.bypass.mobs:
         description: Allows mob hurting
+        default: op
+    restrictcreative.bypass.paygm:
+        description: Dont have to pay for gamemode changes
         default: op
 commands:
    rc:

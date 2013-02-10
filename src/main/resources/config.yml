@@ -90,7 +90,16 @@ allow-autoupdate:
 inventory-split:
   enabled: true
 
+#==============================
+#         Economy      //
+#==============================
 
+economy:
+  pay-gamemode:
+    enabled: false
+    #Amount is only taken it enabled is true! If user does not have the amount needed their gamemode won't change!
+    amount: 25
+    message: "&cYou have paid $25 to enter creative mode!"
 #==============================
 #        END OF CONFIG       //
 #==============================
