@@ -22,10 +22,9 @@
         <dependency>
             <groupId>org.bukkit</groupId>
             <artifactId>craftbukkit</artifactId>
-            <version>1.4.7-R0.1</version>
+            <version>1.4.7-R1.0</version>
         </dependency>
-    </dependencies>
-    <dependency>
+        <dependency>
             <groupId>net.milkbowl.vault</groupId>
             <artifactId>Vault</artifactId>
             <version>1.2.9-SNAPSHOT</version>
