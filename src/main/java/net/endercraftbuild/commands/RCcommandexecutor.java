@@ -46,7 +46,7 @@ public class RCcommandexecutor implements CommandExecutor {
 					if (sender instanceof Player) 
 						{
 							sender.sendMessage(ChatColor.GREEN + "=========" + ChatColor.AQUA + ChatColor.BOLD + "RestrictCreative" + ChatColor.GREEN +  "=========" );
-							sender.sendMessage(ChatColor.YELLOW + "RestrictCreative v 1.5.3-DEV by superpeanut911");
+							sender.sendMessage(ChatColor.YELLOW + "RestrictCreative v 1.5.3 by superpeanut911");
 							sender.sendMessage(ChatColor.DARK_GREEN + "Commands:");
 							sender.sendMessage(ChatColor.GREEN + "/rc reload - Reloads plugin");
 							sender.sendMessage(ChatColor.GREEN + "==================================" );

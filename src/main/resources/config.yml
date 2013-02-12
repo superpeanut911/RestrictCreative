@@ -90,16 +90,24 @@ allow-autoupdate:
 inventory-split:
   enabled: true
 
+
 #==============================
-#         Economy      //
+#          Economy        //
 #==============================
 
 economy:
   pay-gamemode:
     enabled: false
-    #Amount is only taken it enabled is true! If user does not have the amount needed their gamemode won't change!
+    #Amout only paid if enabled is true. If player does not have enough they will stay in survival!
     amount: 25
-    message: "&cYou have paid $25 to enter creative mode!"
+
+#==============================
+#          SpawnEggs      //
+#==============================
+#Note: If you have spawneggs in survival and this check is on, you will still be denied using them
+spawnegg:
+  enabled: true
+
 #==============================
 #        END OF CONFIG       //
 #==============================

@@ -1,6 +1,6 @@
 name: RestrictCreative
 main: main.java.net.endercraftbuild.Main
-version: 1.5.3-DEV
+version: 1.5.3
 author: superpeanut911
 softdepend: [Vault]
 permissions:
@@ -15,6 +15,8 @@ permissions:
             restrictcreative.bypass.commands: true
             restrictcreative.bypass.pickup: true
             restrictcreative.bypass.mobs: true
+            restrictcreative.bypass.spawnegg: true
+            restrictcreative.bypass.paygm: true
     restrictcreative.bypass.pvp:
         description: Allows PvP in creative mode
         default: op
@@ -41,6 +43,9 @@ permissions:
         default: op
     restrictcreative.bypass.paygm:
         description: Dont have to pay for gamemode changes
+        default: op
+    restrictcreative.bypass.spawnegg:
+        description: Allows spawnegg use
         default: op
 commands:
    rc:
