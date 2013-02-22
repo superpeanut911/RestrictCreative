@@ -1,6 +1,6 @@
 name: RestrictCreative
 main: main.java.net.endercraftbuild.Main
-version: 1.5.3
+version: 1.5.4
 author: superpeanut911
 softdepend: [Vault]
 permissions:
@@ -50,4 +50,7 @@ permissions:
 commands:
    rc:
       description: RestrictCreative
-      usage: /<command>
+      usage: |
+        /rc <reload|help>
+        Example: /rc reload - reload the configuration
+        Example: /rc help - display detailed description/usage 

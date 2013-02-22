@@ -1,71 +1,51 @@
 package main.java.net.endercraftbuild.commands;
 
 import main.java.net.endercraftbuild.Main;
+import main.java.net.endercraftbuild.Utils;
 
-import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 public class RCcommandexecutor implements CommandExecutor {
-	private String prefix = ChatColor.RED + "[" + ChatColor.GOLD + "RestrictCreative" + ChatColor.RED + "] ";
+	
 	private Main plugin;
+	
 	public RCcommandexecutor(Main plugin) {
 		this.plugin = plugin;
 	}
+	
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-		if (cmd.getName().equalsIgnoreCase("rc")) {
-			{
-			if (args.length == 1) {
-			{
-			if (args[0].equalsIgnoreCase("reload")) {
-			{
-			if (sender instanceof Player) 
-			{
-			if (sender.hasPermission("restrictcreative.reload")) {
-			{
-				plugin.reloadConfig();
-				sender.sendMessage(prefix + ChatColor.GOLD + "Plugin Reloaded!");
-				
-						}
-					}
-					else {
-					sender.sendMessage(prefix + ChatColor.RED + "You do not have permission to use this command!");
-							}
-						}
-					}
-				}
-				else if(cmd.getName().equalsIgnoreCase("rc"))
-					{
-					if(args.length == 1) {
-					{
-					if(args[0].equalsIgnoreCase("help")) {
-					{
-					if (sender instanceof Player) 
-						{
-							sender.sendMessage(ChatColor.GREEN + "=========" + ChatColor.AQUA + ChatColor.BOLD + "RestrictCreative" + ChatColor.GREEN +  "=========" );
-							sender.sendMessage(ChatColor.YELLOW + "RestrictCreative v 1.5.3 by superpeanut911");
-							sender.sendMessage(ChatColor.DARK_GREEN + "Commands:");
-							sender.sendMessage(ChatColor.GREEN + "/rc reload - Reloads plugin");
-							sender.sendMessage(ChatColor.GREEN + "==================================" );
-											}
-										}
-									}
-								}
-							}
-							{
-								return true;
-							}
-						}
-					}
-				}
-			}
+		if (!(sender instanceof Player)) {
+			sender.sendMessage("You must be a player!");
 			return true;
 		}
-	return true;
+		
+		Player player = (Player) sender;
+		
+		if (args.length < 1) {
+			player.sendMessage(cmd.getUsage());
+			return true;
+		}
+		
+		if (args[0].equalsIgnoreCase("reload")) {
+			if (player.hasPermission("restrictcreative.reload")) {
+				plugin.reloadConfig();
+				Utils.sendMessage(player, "&6Plugin Reloaded!");
+			} else {
+				Utils.sendMessage(player, "&4You do not have permission to use this command!");
+			}
+		} else if (args[0].equalsIgnoreCase("help")) {
+			Utils.sendMessage(player, "&a=========&b&lRestrictCreative&a=========");
+			Utils.sendMessage(player, "&eRestrictCreative v 1.5.4 by superpeanut911");
+			Utils.sendMessage(player, "&2Commands:");
+			Utils.sendMessage(player, "&a/rc reload - Reloads plugin");
+			Utils.sendMessage(player, "&a==================================");
+		}
+		
+		return true;
 	}
-	{
-	}
+	
 }
