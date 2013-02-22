@@ -25,7 +25,7 @@ block-item-drop:
 place-blacklist:
   enabled: true
   #The blockname is always last, You cannot disable it at this point
-  message: "&cYou are not allowed to place "
+  message: "&cYou are not allowed to place {BLOCK}!"
   blacklist:
   - 7
 
@@ -63,7 +63,7 @@ block-pickup:
 break-blacklist:
   enabled: true
   #Block name always at the end, Sorry!
-  message: "&cYou are not allowed to place "
+  message: "&cYou are not allowed to break {BLOCK}!"
   blacklist:
   - 7
 
@@ -100,6 +100,8 @@ economy:
     enabled: false
     #Amout only paid if enabled is true. If player does not have enough they will stay in survival!
     amount: 25
+    success: "&cYou have been charged {AMOUNT}&c for changing game modes!"
+    failure: "&cYou need {AMOUNT}&c to change game modes!"
 
 #==============================
 #          SpawnEggs      //
