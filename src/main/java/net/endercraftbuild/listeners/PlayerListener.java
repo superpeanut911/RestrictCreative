@@ -3,16 +3,14 @@ package main.java.net.endercraftbuild.listeners;
 import java.util.List;
 
 import main.java.net.endercraftbuild.Main;
+import main.java.net.endercraftbuild.Utils;
 
 
-import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
-import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.Chest;
 import org.bukkit.block.DoubleChest;
 import org.bukkit.command.Command;
-import org.bukkit.entity.Arrow;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Creature;
@@ -30,203 +28,187 @@ import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
 
 public class PlayerListener implements Listener {
+	
 	private Main plugin;
 
-	private String prefix = ChatColor.RED + "[" + ChatColor.GOLD + "RestrictCreative" + ChatColor.RED + "] ";
-
-	public PlayerListener(Main instance) {
-
-		plugin = instance;
+	public PlayerListener(Main plugin) {
+		this.plugin = plugin;
 	}
-
 
 	//Creative PvP check
 	@EventHandler(ignoreCancelled=true)
-	public void onHit(EntityDamageByEntityEvent event)
-	{
-		if (event.getDamager().getType().equals(EntityType.PLAYER))
-		{
-			if (((Player)event.getDamager()).getGameMode().equals(GameMode.CREATIVE))
-			{
-				if (!((Player)event.getDamager()).hasPermission("restrictcreative.bypass.pvp"))
-				{
-					if (event.getEntity().getType().equals(EntityType.PLAYER)) {
-						if (plugin.getConfig().getBoolean("block-pvp.enabled") == true); 
-						event.setCancelled(true);
-						String configmsg = ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("block-pvp.message"));
-						((Player)event.getDamager()).sendMessage(prefix + configmsg);
-					}
-				}
-			}
-		}
+	public void onPlayerDamageByCreativePlayer(EntityDamageByEntityEvent event) {
+		if (!plugin.getConfig().getBoolean("block-pvp.enabled", true))
+			return;
+		if (event.getDamager().getType() != EntityType.PLAYER || event.getEntity().getType() != EntityType.PLAYER)
+			return;
+		
+		Player damager = (Player) event.getDamager();
+		
+		if (damager.getGameMode() != GameMode.CREATIVE)
+			return;
+		if (damager.hasPermission("restrictcreative.bypass.pvp"))
+			return;
+		
+		Utils.sendMessage(damager, plugin.getConfig().getString("block-pvp.message"));
+		event.setCancelled(true);
 	}
+	
 	//Creative Item drop check
 	@EventHandler
-	public void Share(PlayerDropItemEvent e) {
-		Player pl = e.getPlayer();
-		if(plugin.getConfig().getBoolean("block-item-drop.enabled") == true)
-		{
-			if(e.getPlayer().getGameMode().equals(GameMode.CREATIVE))
-			{
-				if(!(e.getPlayer().hasPermission("restrictcreative.bypass.drop")))
-					e.setCancelled(true);
-				String configmsg = ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("block-item-drop.message"));
-				pl.sendMessage(prefix + configmsg);
-			}
-		}
+	public void onCreativePlayerDropItem(PlayerDropItemEvent event) {
+		if (!plugin.getConfig().getBoolean("block-item-drop.enabled", true))
+			return;
+		
+		Player player = event.getPlayer();
+		
+		if (player.getGameMode() != GameMode.CREATIVE)
+			return;
+		if (player.hasPermission("restrictcreative.bypass.drop"))
+			return;
+		
+		Utils.sendMessage(player, plugin.getConfig().getString("block-item-drop.message"));
+		event.setCancelled(true);
 	}
 
 	//Block place blacklist
 	@EventHandler
-	public void onPlace(BlockPlaceEvent event) {
+	public void onCreativeBlockPlace(BlockPlaceEvent event) {
+		if (!plugin.getConfig().getBoolean("place-blacklist.enabled", true))
+			return;
+		
 		Player player = event.getPlayer();
-		{
-			if(event.getPlayer().getGameMode().equals(GameMode.CREATIVE))
-			{
-				if(!(event.getPlayer().hasPermission("restrictcreative.bypass.placeblacklist")))
-				{
-					if (plugin.getConfig().getBoolean("place-blacklist.enabled") == true) {
-						List<Integer> blacklistID = plugin.getConfig().getIntegerList("place-blacklist.blacklist");
-						Block placedBlock = event.getBlock();
-						{
-							if (blacklistID.contains(Integer.valueOf(placedBlock.getTypeId()))) {
-								event.setCancelled(true);
-								String configmsg = ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("place-blacklist.message"));
-								player.sendMessage(prefix + configmsg +  Material.getMaterial(placedBlock.getTypeId()) + "!");
-							}
-						}
-					}
-				}
-			}
-		}
+		
+		if (player.getGameMode() != GameMode.CREATIVE)
+			return;
+		if (player.hasPermission("restrictcreative.bypass.placeblacklist"))
+			return;
+		
+		List<Integer> blacklistIdList = plugin.getConfig().getIntegerList("place-blacklist.blacklist");
+		Block placedBlock = event.getBlock();
+		
+		if (!blacklistIdList.contains(placedBlock.getTypeId()))
+			return;
+		
+		Utils.sendMessage(player, plugin.getConfig().getString("place-blacklist.message").replace("{BLOCK}", placedBlock.getType().toString()));
+		event.setCancelled(true);
 	}
+	
 	//Creative Chest block check
 	@EventHandler
-	public void ChestBlock(InventoryOpenEvent e){
-		Player p = (Player) e.getPlayer();
-		{
-			if(e.getPlayer().getGameMode().equals(GameMode.CREATIVE))
-			{
-				if(!(e.getPlayer().hasPermission("restrictcreative.bypass.chest")))
-				{
-					if (plugin.getConfig().getBoolean("chest-block.enabled") == true) {
-						{
-							if (e.getInventory().getHolder() instanceof Chest || e.getInventory().getHolder() instanceof DoubleChest);
-							e.setCancelled(true);
-							String configmsg = ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("chest-block.message"));
-							p.sendMessage(prefix + configmsg); }
-					}
-				}
-			}
-		}
+	public void onCreativeChestAccess(InventoryOpenEvent event) {
+		if (!plugin.getConfig().getBoolean("chest-block.enabled", true))
+			return;
+		if (!(event.getInventory().getHolder() instanceof Chest) &&
+				!(event.getInventory().getHolder() instanceof DoubleChest))
+			return;
+		
+		Player player = (Player) event.getPlayer();
+		
+		if (player.getGameMode() != GameMode.CREATIVE)
+			return;
+		if (player.hasPermission("restrictcreative.bypass.chest"))
+			return;
+		
+		Utils.sendMessage(player, plugin.getConfig().getString("chest-block.message"));
+		event.setCancelled(true);
 	}
+	
 	//Command blacklist check
-	@EventHandler(priority=EventPriority.MONITOR)
-	public void CommandBlacklist(PlayerCommandPreprocessEvent e) {
-		{
-			Player player = e.getPlayer();
-			String[] cmdArg = e.getMessage().split(" ");
-			Command command = plugin.getServer().getPluginCommand(cmdArg[0].trim().replaceFirst("/", ""));
-			List<String> CommandBlacklist = plugin.getConfig().getStringList("command-blacklist.blacklist");
-			{
-				if (command == null) 
-				{
-					return;
-				}
-				if (!CommandBlacklist.contains(command.getName().toLowerCase())) 
-				{
-					return;
-				}   
-				else {
-					if(e.getPlayer().getGameMode().equals(GameMode.CREATIVE))
-					{
-						if(!(e.getPlayer().hasPermission("restrictcreative.bypass.commands")))
-						{
-							if (plugin.getConfig().getBoolean("command-blacklist.enabled") == true) {
-								{
-									if (CommandBlacklist.contains(command.getName().toLowerCase())); {
-										String configmsg = ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("command-blacklist.message"));
-										e.setCancelled(true);
-										player.sendMessage(prefix + configmsg); }
-								}	
-							}
-						}
-					}
-				}
-			}
-		}
-	}
-	@EventHandler //Anti-Creative item pick up
-	public void creativepickup(PlayerPickupItemEvent event) {
-		if(event.getPlayer().getGameMode().equals(GameMode.CREATIVE))
-		{
-			if(!(event.getPlayer().hasPermission("restrictcreative.bypass.pickup")))
-			{
-				if (plugin.getConfig().getBoolean("block-pickup.enabled") == true) {
-					event.setCancelled(true);
-				}
-			}
+	@EventHandler(priority = EventPriority.HIGHEST)
+	public void onCreativePlayerCommandPreProcess(PlayerCommandPreprocessEvent event) {
+		if (!plugin.getConfig().getBoolean("command-blacklist.enabled", true))
+			return;
 
-		}
+		Player player = event.getPlayer();
+
+		if (player.getGameMode() != GameMode.CREATIVE)
+			return;
+		if (player.hasPermission("restrictcreative.bypass.commands"))
+			return;
+		
+		String[] cmdArg = event.getMessage().split(" ");
+		Command command = plugin.getServer().getPluginCommand(cmdArg[0].trim().replaceFirst("/", ""));
+		
+		if (command == null)
+			return;
+		
+		List<String> commandBlacklistList = plugin.getConfig().getStringList("command-blacklist.blacklist");
+		
+		if (!commandBlacklistList.contains(command.getName().toLowerCase()))
+			return;
+		
+		Utils.sendMessage(player, plugin.getConfig().getString("command-blacklist.message"));
+		event.setCancelled(true);
 	}
+	
+	@EventHandler //Anti-Creative item pick up
+	public void onCreativePlayerPickupItem(PlayerPickupItemEvent event) {
+		if (!plugin.getConfig().getBoolean("block-pickup.enabled", true))
+			return;
+		
+		Player player = event.getPlayer();
+		
+		if (player.getGameMode() != GameMode.CREATIVE)
+			return;
+		if (player.hasPermission("restrictcreative.bypass.pickup"))
+			return;
+		
+		event.setCancelled(true);
+	}
+	
 	//Block break blacklist
 	@EventHandler
-	public void onBreak(BlockBreakEvent event) {
+	public void onCreativeBlockBreak(BlockBreakEvent event) {
+		if (!plugin.getConfig().getBoolean("break-blacklist.enabled", true))
+			return;
+		
 		Player player = event.getPlayer();
-		{
-			if(event.getPlayer().getGameMode().equals(GameMode.CREATIVE))
-			{
-				if(!(event.getPlayer().hasPermission("restrictcreative.bypass.breakblacklist")))
-				{
-					if (plugin.getConfig().getBoolean("break-blacklist.enabled") == true) {
-						List<Integer> breakblacklistID = plugin.getConfig().getIntegerList("break-blacklist.blacklist");
-						Block bBlock = event.getBlock();
-						{
-							if (breakblacklistID.contains(Integer.valueOf(bBlock.getTypeId()))) {
-								event.setCancelled(true);
-								String configmsg = ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("break-blacklist.message"));
-								player.sendMessage(prefix + configmsg +  Material.getMaterial(bBlock.getTypeId()) + "!");
-							}
-						}
-					}
-				}
-			}
-		}
-	}
-	{
+		
+		if (player.getGameMode() != GameMode.CREATIVE)
+			return;
+		if (player.hasPermission("restrictcreative.bypass.breakblacklist"))
+			return;
+		
+		List<Integer> breakBlacklistIdList = plugin.getConfig().getIntegerList("break-blacklist.blacklist");
+		Block brokenBlock = event.getBlock();
+		
+		if (!breakBlacklistIdList.contains(brokenBlock.getTypeId()))
+			return;
+		
+		Utils.sendMessage(player, plugin.getConfig().getString("break-blacklist.message").replace("{BLOCK}", brokenBlock.getType().toString()));
+		event.setCancelled(true);
 	}
 
 	@EventHandler//Block dealing damage to mobs
-	public void onMobDamage(EntityDamageByEntityEvent e) {
-		if(e.getDamager() instanceof Creature)
+	public void onMobyDamageByCreativePlayer(EntityDamageByEntityEvent event) {
+		if (!plugin.getConfig().getBoolean("block-mob-harming.enabled", true))
 			return;
-		if(e.getDamager() instanceof Arrow)
+		if (event.getDamager().getType() != EntityType.PLAYER || !(event.getEntity() instanceof Creature))
 			return;
-		if(e.getEntity() instanceof Creature && e.getDamager() instanceof Player) {
-			if(((Player) e.getDamager()).getGameMode().equals(GameMode.CREATIVE))
-				if(!(((Player) e.getDamager()).hasPermission("restrictcreative.bypass.mobs")))
-					if (plugin.getConfig().getBoolean("block-mob-harming.enabled") == true) {
+		
+		Player player = (Player) event.getDamager();
 
-						e.setCancelled(true);
-						String configmsg = ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("block-mob-harming.message"));	
-						((Player) e.getDamager()).sendMessage(prefix + configmsg);
-
-					}	
-		}
+		if (player.getGameMode() != GameMode.CREATIVE)
+			return;
+		if (player.hasPermission("restrictcreative.bypass.mobs"))
+			return;
+		
+		Utils.sendMessage(player, plugin.getConfig().getString("block-mob-harming.message"));
+		event.setCancelled(true);
 	}
 
 	@EventHandler//Block spawneggs
-	public void noSpawnEggs(CreatureSpawnEvent event) {
-		{
-			if(event.getSpawnReason() == SpawnReason.SPAWNER_EGG) {
-						if (plugin.getConfig().getBoolean("spawnegg.enabled") == true) {
-							event.setCancelled(true);
-						}
-					}
-				{
-			}
-		}
+	public void onCreatureSpawn(CreatureSpawnEvent event) {
+		if (!plugin.getConfig().getBoolean("spawnegg.enabled", true))
+			return;
+		
+		if (event.getSpawnReason() != SpawnReason.SPAWNER_EGG)
+			return;
+		
+		event.setCancelled(true);
 	}
+	
 }
 
 

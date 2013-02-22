@@ -3,195 +3,79 @@ package main.java.net.endercraftbuild.inventories;
 import java.io.*;
 
 import main.java.net.endercraftbuild.Main;
+import main.java.net.endercraftbuild.Utils;
 
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerGameModeChangeEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerKickEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.Inventory;
 
 public class InvManager implements Listener {
 
 	private Main plugin;
 
-	public InvManager(Main instance) {
-		plugin = instance;
+	public InvManager(Main plugin) {
+		this.plugin = plugin;
 	}
-	@EventHandler//Change inv on gm change
-	public void Gm(PlayerGameModeChangeEvent event) throws IllegalArgumentException, IOException {
-
+	
+	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true) //Change inv on gm change
+	public void onPlayerGameModeChange(PlayerGameModeChangeEvent event) {
+		if (!plugin.getConfig().getBoolean("inventory-split.enabled", true))
+			return;
+		
 		Player player = event.getPlayer();
-		if (plugin.getConfig().getBoolean("inventory-split.enabled") == true) { 
-		if(event.getNewGameMode() == GameMode.CREATIVE) {
-			saveSurvivalInv(player);
+		
+		try {
+			saveInventory(player, player.getGameMode());
 			player.getInventory().clear();
-			loadCreativeInv(player);
-
-		} else 
-			if (plugin.getConfig().getBoolean("inventory-split.enabled") == true) {
-			saveCreativeInv(player);
-			player.getInventory().clear();
-			loadSurvivalInv(player); {
-				}
-			}
+			loadInventory(player, event.getNewGameMode());
+		} catch (IOException e) {
+			Utils.sendMessage(player, "&4Failed to load &6%s&4 inventory, staying in &6%s&4.", event.getNewGameMode(), player.getGameMode());
+			event.setCancelled(true);
 		}
 	}
+	
+	// why a PlayerJoinEvent handler?
+	// why a PlayerQuitEvent handler?
+	// why a PlayerKickEvent handler?
+	
+	private void saveInventory(Player player, GameMode mode) throws IOException {
+		String data = Serialization.toBase64(player.getInventory());
+		File file = new File(plugin.inventoriesDirectory + "/" + player.getName() + "-" + mode.toString().toLowerCase() + "_.txt");
+		
+		if (!file.exists())
+			file.createNewFile();
+		FileWriter fileWriter = new FileWriter(file);
+		BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
+		bufferedWriter.write(data);
+		bufferedWriter.close();
+	}
+	
+	private void loadInventory(Player player, GameMode mode) throws IOException {
+		File file = new File(plugin.inventoriesDirectory + "/" + player.getName() + "-" + mode.toString().toLowerCase() + "_.txt");
+		if (!file.exists())
+			return;
 
+		StringBuilder stringBuilder = new StringBuilder();
 
-
-	@EventHandler//Make files
-	public void PlayerJoin(PlayerJoinEvent event) {
-
-		File PlayerFileS;
-		Player player = event.getPlayer();
-		String Inventories = "Inventories";
-		boolean success = (new File("plugins/RestrictCreative/" + Inventories)).mkdir();
-		if(success) {
-			PlayerFileS = new File(plugin.getDataFolder(), "/Inventories/" + player.getName() + "-survival_.txt");
-			if(!PlayerFileS.exists()) {
-				try {
-					PlayerFileS.createNewFile();
-					saveSurvivalInv(player);
-				}
-				catch(IOException exx) {
-					exx.printStackTrace();
-				}
-				File PlayerFileC;
-				PlayerFileC = new File(plugin.getDataFolder(), "/" + "Inventories" + "/" + player.getName() + "-creative_.txt");
-				if(!PlayerFileC.exists()) {
-					try {
-						PlayerFileC.createNewFile();
-						saveCreativeInv(player);
-					}
-					catch (IOException ex) {
-						ex.printStackTrace();
-					}
-				}
-			}
-
+		FileReader fileReader = new FileReader(file);
+		int charsRead = 0;
+		char[] charArray = new char[8192];
+		
+		try {
+			while ((charsRead = fileReader.read(charArray)) > 0)
+				stringBuilder.append(charArray, 0, charsRead);
+		} finally {
+			fileReader.close();
 		}
+			
+		Inventory inventory = Serialization.fromBase64(stringBuilder.toString());
+		player.getInventory().setContents(inventory.getContents());
 	}
-
-	@EventHandler//Save on leave
-	public void onPlayerQuit(PlayerQuitEvent event) {
-		Player player = event.getPlayer();
-		if(player.getGameMode() == GameMode.CREATIVE){
-			try {
-				saveCreativeInv(player);
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		} else
-			try {
-				saveSurvivalInv(player);
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-
-	}
-	@EventHandler
-	public void kick(PlayerKickEvent event) {
-		Player player = event.getPlayer();
-		if(player.getGameMode() == GameMode.CREATIVE){
-			try {
-				saveCreativeInv(player);
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		} else
-			try {
-				saveSurvivalInv(player);
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-
-	}
-	private void saveCreativeInv(Player player1) throws IOException {
-		String dataC = Serilization.toBase64(player1.getInventory());
-		FileWriter fstream;
-		fstream = new FileWriter(plugin.getDataFolder() + "/" + "Inventories/" + player1.getName() + "-creative_.txt");
-		BufferedWriter out = new BufferedWriter(fstream);
-		out.write(dataC);
-		//Close the output stream
-		out.close();
-
-	}
-
-
-	private void saveSurvivalInv(Player player2) throws IOException {
-		String dataS = Serilization.toBase64(player2.getInventory());
-		FileWriter fstream;
-		fstream = new FileWriter(plugin.getDataFolder() + "/" + "Inventories/" + player2.getName() + "-survival_.txt");
-
-		BufferedWriter out = new BufferedWriter(fstream);
-		out.write(dataS);
-		//Close the output stream
-		out.close();
-
-	}
-
-	private void loadCreativeInv(Player player3) throws IllegalArgumentException, IOException, FileNotFoundException {
-		File PlayerFileC;
-		PlayerFileC = new File(plugin.getDataFolder(), "/Inventories/" + player3.getName() + "-creative_.txt");
-		if(PlayerFileC.exists()) {
-
-			FileReader fileReader = new FileReader(PlayerFileC);
-			StringBuffer stringBuffer = new StringBuffer();
-			int numCharsRead;
-			char[] charArray = new char[2048];
-			while ((numCharsRead = fileReader.read(charArray)) > 0) {
-				stringBuffer.append(charArray, 0, numCharsRead);
-				Inventory i = Serilization.fromBase64(stringBuffer.toString());
-				player3.getInventory().setContents(i.getContents());
-			}
-		}
-	}		
-
-	private void loadSurvivalInv(Player player4) throws IOException, FileNotFoundException { {
-		File PlayerFileC;
-		PlayerFileC = new File(plugin.getDataFolder(), "/Inventories/" + player4.getName() + "-survival_.txt");
-		if(PlayerFileC.exists()) {
-			FileReader fileReader = new FileReader(PlayerFileC);
-			StringBuffer stringBuffer = new StringBuffer();
-			int numCharsRead;
-			char[] charArray = new char[2048];
-			while ((numCharsRead = fileReader.read(charArray)) > 0) {
-				stringBuffer.append(charArray, 0, numCharsRead);
-				Inventory i = Serilization.fromBase64(stringBuffer.toString());
-				player4.getInventory().setContents(i.getContents());
-			}
-
-
-
-
-			{
-			}
-
-
-			{
-			}
-			{
-			}
-
-
-			{
-			}
-			{
-			}
-
-		}
-		{
-		}
-	}
-	}
+	
 }
 
 

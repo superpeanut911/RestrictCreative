@@ -2,46 +2,49 @@ package main.java.net.endercraftbuild.economy;
 
 import net.milkbowl.vault.economy.EconomyResponse;
 
-import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerGameModeChangeEvent;
 
 import main.java.net.endercraftbuild.Main;
+import main.java.net.endercraftbuild.Utils;
 
 public class EconListener implements Listener {
-
-private String prefix = ChatColor.RED + "[" + ChatColor.GOLD + "RestrictCreative" + ChatColor.RED + "] ";
 	
+	private Main plugin;
 	
-private Main plugin;
-
-public EconListener(Main plugin) {
-	this.plugin = plugin;
+	public EconListener(Main plugin) {
+		this.plugin = plugin;
 	}
 
-@EventHandler
-public void PayGm(PlayerGameModeChangeEvent event) {
+	@EventHandler(priority = EventPriority.HIGH)
+	public void onPlayerGameModeChange(PlayerGameModeChangeEvent event) {
+		if (!plugin.getConfig().getBoolean("economy.pay-gamemode.enabled", true))
+			return;
+		if (Main.economy == null) {
+			plugin.getLogger().warning("economy.pay-gamemode.enabled = true but Vault is not loaded");
+			return;
+		}
+		
 		Player player = event.getPlayer();
-		if(event.getNewGameMode() == GameMode.CREATIVE) {
-			if(plugin.getConfig().getBoolean("economy.pay-gamemode.enabled") == true) {
-			if(!player.hasPermission("restrictcreative.bypass.paygm")) {
 		
-		Double amount = plugin.getConfig().getDouble("economy.pay-gamemode.amount");		
-		EconomyResponse r = Main.economy.withdrawPlayer(player.getName(), amount);
-		if(r.transactionSuccess()) {
-			String configmsg = ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("economy.pay-gamemode.message"));
+		if (event.getNewGameMode() != GameMode.CREATIVE)
+			return;
+		if (player.hasPermission("restrictcreative.bypass.paygm"))
+			return;
 		
-			player.sendMessage(prefix + configmsg );
-			}
-			else if(!r.transactionSuccess()) {
-				event.setCancelled(true);
-				player.sendMessage(prefix + ChatColor.RED + "You need: $" + amount + ChatColor.RED + " to go into creative!"); 
-				}
-			}	
+		Double amount = plugin.getConfig().getDouble("economy.pay-gamemode.amount", 0.0);		
+		EconomyResponse r = Main.economy.withdrawPlayer(player.getName(), amount); 
+		
+		if (r.transactionSuccess()) {
+			Utils.sendMessage(player, plugin.getConfig().getString("economy.pay-gamemode.success").replace("{AMOUNT}", Main.economy.format(amount)));
+		} else {
+			Utils.sendMessage(player, plugin.getConfig().getString("economy.pay-gamemode.failure").replace("{AMOUNT}", Main.economy.format(amount))); 
+			event.setCancelled(true);
 		}
 	}
-}
+	
 }

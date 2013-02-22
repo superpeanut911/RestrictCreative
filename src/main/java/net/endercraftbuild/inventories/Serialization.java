@@ -16,7 +16,8 @@ import org.bukkit.craftbukkit.v1_4_R1.inventory.CraftItemStack;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
  
-public class Serilization {
+public class Serialization {
+	
     public static String toBase64(Inventory inventory) {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         DataOutputStream dataOutput = new DataOutputStream(outputStream);
@@ -66,4 +67,5 @@ public class Serilization {
         else
             return null;
     }
+    
 }
