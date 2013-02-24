@@ -1,9 +1,9 @@
-package main.java.net.endercraftbuild.listeners;
+package net.endercraftbuild.listeners;
 
 import java.util.List;
 
-import main.java.net.endercraftbuild.Main;
-import main.java.net.endercraftbuild.Utils;
+import net.endercraftbuild.Main;
+import net.endercraftbuild.Utils;
 
 
 import org.bukkit.GameMode;

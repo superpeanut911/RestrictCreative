@@ -1,4 +1,4 @@
-package main.java.net.endercraftbuild;
+package net.endercraftbuild;
 
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;

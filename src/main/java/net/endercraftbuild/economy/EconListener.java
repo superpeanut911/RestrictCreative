@@ -1,4 +1,4 @@
-package main.java.net.endercraftbuild.economy;
+package net.endercraftbuild.economy;
 
 import net.milkbowl.vault.economy.EconomyResponse;
 
@@ -9,8 +9,8 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerGameModeChangeEvent;
 
-import main.java.net.endercraftbuild.Main;
-import main.java.net.endercraftbuild.Utils;
+import net.endercraftbuild.Main;
+import net.endercraftbuild.Utils;
 
 public class EconListener implements Listener {
 	

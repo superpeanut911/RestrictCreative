@@ -1,14 +1,14 @@
-package main.java.net.endercraftbuild;
+package net.endercraftbuild;
 
 import java.io.File;
 import java.io.IOException;
 
-import main.java.net.endercraftbuild.commands.RCcommandexecutor;
-import main.java.net.endercraftbuild.listeners.PlayerListener;
-import main.java.net.endercraftbuild.metrics.Metrics;
-import main.java.net.endercraftbuild.updater.Updater;
-import main.java.net.endercraftbuild.inventories.InvManager;
-import main.java.net.endercraftbuild.economy.EconListener;
+import net.endercraftbuild.commands.RCcommandexecutor;
+import net.endercraftbuild.listeners.PlayerListener;
+import net.endercraftbuild.metrics.Metrics;
+import net.endercraftbuild.updater.Updater;
+import net.endercraftbuild.inventories.InvManager;
+import net.endercraftbuild.economy.EconListener;
 import net.milkbowl.vault.economy.Economy;
 
 import org.bukkit.event.Listener;

@@ -1,7 +1,7 @@
-package main.java.net.endercraftbuild.commands;
+package net.endercraftbuild.commands;
 
-import main.java.net.endercraftbuild.Main;
-import main.java.net.endercraftbuild.Utils;
+import net.endercraftbuild.Main;
+import net.endercraftbuild.Utils;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;

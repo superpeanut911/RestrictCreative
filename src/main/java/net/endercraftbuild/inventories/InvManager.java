@@ -1,9 +1,9 @@
-package main.java.net.endercraftbuild.inventories;
+package net.endercraftbuild.inventories;
 
 import java.io.*;
 
-import main.java.net.endercraftbuild.Main;
-import main.java.net.endercraftbuild.Utils;
+import net.endercraftbuild.Main;
+import net.endercraftbuild.Utils;
 
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;

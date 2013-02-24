@@ -1,4 +1,4 @@
-package main.java.net.endercraftbuild.updater;
+package net.endercraftbuild.updater;
 
 /*
  * Updater for Bukkit.
@@ -21,7 +21,7 @@ import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.events.XMLEvent;
 
-import main.java.net.endercraftbuild.Main;
+import net.endercraftbuild.Main;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
